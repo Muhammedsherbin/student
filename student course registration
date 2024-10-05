@@ -1,0 +1,80 @@
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
+
+class Student {
+    private String name;
+    private String studentID;
+    private String email;
+    private List<String> courses;
+
+    public Student(String name, String studentID, String email) {
+        this.name = name;
+        this.studentID = studentID;
+        this.email = email;
+        this.courses = new ArrayList<>();
+    }
+
+    public void registerCourse(String course) {
+        courses.add(course);
+    }
+
+    public String getDetails() {
+        return "Name: " + name + ", Student ID: " + studentID + ", Email: " + email + ", Courses: " + courses;
+    }
+}
+
+public class CourseRegistration {
+    private static final Map<String, String> availableCourses = new HashMap<>();
+
+    static {
+        availableCourses.put("CSE101", "Introduction to Computer Science");
+        availableCourses.put("MTH101", "Calculus I");
+        availableCourses.put("PHY101", "Physics I");
+        // Add more courses as needed
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Welcome to Course Registration System");
+
+        System.out.print("Enter Student Name: ");
+        String name = scanner.nextLine();
+
+        System.out.print("Enter Student ID: ");
+        String studentID = scanner.nextLine();
+
+        System.out.print("Enter Email: ");
+        String email = scanner.nextLine();
+
+        Student student = new Student(name, studentID, email);
+
+        boolean registering = true;
+
+        while (registering) {
+            System.out.println("\nAvailable Courses:");
+            availableCourses.forEach((code, title) -> {
+                System.out.println(code + ": " + title);
+            });
+
+            System.out.print("Enter Course Code to register (or type 'exit' to finish): ");
+            String courseCode = scanner.nextLine().toUpperCase();
+
+            if (courseCode.equals("EXIT")) {
+                registering = false;
+            } else if (availableCourses.containsKey(courseCode)) {
+                student.registerCourse(availableCourses.get(courseCode));
+                System.out.println("Registered for " + availableCourses.get(courseCode));
+            } else {
+                System.out.println("Invalid course code. Please try again.");
+            }
+        }
+
+        System.out.println("\nRegistration Completed. Student Details:");
+        System.out.println(student.getDetails());
+
+        scanner.close();
+    }
+}
